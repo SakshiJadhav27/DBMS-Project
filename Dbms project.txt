@@ -1,0 +1,320 @@
+create table students
+(
+sid int primary key,
+sname varchar2(20),
+age int,
+gender varchar2(10),
+year int,
+contact_no int
+);
+
+create table student_marks
+(
+sid int,
+constraint fk_sc
+foreign key (sid) references students (sid),
+English int,
+Marathi int,
+ hindi int,
+maths int,
+science int,
+so_science int,
+marks_obtained int,
+total_marks int default 600
+);
+
+create table school_report
+(
+sid int,
+constraint fk_pc
+foreign key (sid) references students (sid),
+academic_year int,
+marks_obtained int,
+percentage float,
+grade char(10),
+school_result float
+);
+
+
+
+insert into students values(101,'Ganesh sawant',27,'M',2012,9428789800);
+insert into students values(102,'Ayush mane',26,'M',2013,7448794100);
+insert into students values(103,'Ankita patil',25,'F',2014,9022334455);
+insert into students values(104,'Sara singh',24,'F',2015,9428756543);
+insert into students values(105,'Rupali wagh',23,'F',2016,9054267711);
+insert into students values(106,'Pornima more',22,'F',2017,7766554433);
+insert into students values(107,'Kunal patil',21,'M',2018,7021536232);
+insert into students values(108,'Kanika kale',20,'F',2019,9988776655);
+insert into students values(109,'Kartik bhosale',19,'M',2020,9428776840);
+insert into students values(110,'Prashant khade',18,'M',2021,8766551348);
+
+
+
+insert into student_marks(sid,english,marathi,hindi,maths,science,so_science,marks_obtained) values(101,80,85,87,90,82,92,516);
+insert into student_marks(sid,english,marathi,hindi,maths,science,so_science,marks_obtained) values(102,84,87,93,89,90,88,531);
+insert into student_marks(sid,english,marathi,hindi,maths,science,so_science,marks_obtained) values(103,85,90,95,86,93,85,534);
+insert into student_marks(sid,english,marathi,hindi,maths,science,so_science,marks_obtained) values(104,90,85,91,90,95,93,544);
+insert into student_marks(sid,english,marathi,hindi,maths,science,so_science,marks_obtained) values(105,91,85,93,95,90,90,544);
+insert into student_marks(sid,english,marathi,hindi,maths,science,so_science,marks_obtained) values(106,85,90,95,92,88,96,546);
+insert into student_marks(sid,english,marathi,hindi,maths,science,so_science,marks_obtained) values(107,88,92,96,98,89,95,552);
+insert into student_marks(sid,english,marathi,hindi,maths,science,so_science,marks_obtained) values(108,90,93,95,97,92,97,564);
+insert into student_marks(sid,english,marathi,hindi,maths,science,so_science,marks_obtained) values(109,94,95,98,95,93,98,573);
+insert into student_marks(sid,english,marathi,hindi,maths,science,so_science,marks_obtained) values(110,95,97,98,96,97,98,581);
+
+
+
+insert into school_report values(101,2012,516,86.0,'A2',90.0);
+insert into school_report values(102,2013,531,88.5,'A2',91.0);
+insert into school_report values(103,2014,534,89.0,'A2',91.6);
+insert into school_report values(104,2015,544,90.6,'A1',93.0);
+insert into school_report values(105,2016,544,90.6,'A1',90.0);
+insert into school_report values(106,2017,546,91.0,'A1',94.0);
+insert into school_report values(107,2018,552,92.0,'A1',97.0);
+insert into school_report values(108,2019,564,94.0,'A1',99.0);
+insert into school_report values(109,2020,573,95.5,'O',98.5);
+insert into school_report values(110,2021,581,96.8,'O',99.9);
+
+select *from students;
+set linesize 200;
+select *from student_marks;
+
+select *from school_report;
+
+Aggregate function:
+
+Q.How much the average of school result till now
+---------------------------------------------------
+select avg(school_result)
+from school_report;
+
+Q.How much the maximum of school result till now
+---------------------------------------------------
+select max(school_result)
+from school_report;
+
+*Q.How much the average of school result > 95
+
+select min(school_result)
+from school_report
+where school_result>95;
+
+*Q.to find out the min & max school result
+
+select max(school_result)
+from school_report;
+
+select min(school_result)
+from school_report;
+
+Q.To find the female student details
+--------------------------------------
+select sid,sname,age,year
+from students
+where gender='F';
+
+Q.To find the male student details
+--------------------------------------
+select sid,sname,age,year
+from students
+where gender='M';
+Q.How many
+select count(distinct gender)
+from students;
+where gender='F'and gender='M';
+
+Q.How many students have records whose percentage is > 90
+--------------------------------------------------------------
+select count(*)
+from school_report
+where percentage>=90;
+
+Q.How many types of grades students got obtained? 
+---------------------------------------------------------
+select count(distinct grade) 
+from school_report;
+
+comparison operators:
+
+Q.what is the report of year 2012 ?
+-----------------------------------------
+select * from school_report
+where academic_year=2012;
+
+Q.What are the details of student whose age is 26 ?
+-------------------------------------------------------
+select sid,sname,contact_no
+from students
+where age=26;
+
+Q.find the details which grade is not equal to A1
+--------------------------------------------------------
+select sid,academic_year,marks_obtained,percentage,grade
+from school_report
+where grade!='A1';
+
+Q.What are the details of students before year 2018 ?
+---------------------------------------------------------
+select * from students
+where year<2018;
+
+Logical operators:
+
+select *from students
+where age<=22 and year>=2018;
+
+select *from students
+where age<=22 or year>=2018;
+
+Q.name starts with K
+
+select *from students
+where sname like 'K%';
+
+Q.name ends with e
+
+select *from students
+where sname like '%e';
+
+Q.between
+
+Q.How many students have marks between 520 to 580?
+------------------------------------------------------
+select * from student_marks 
+where marks_obtained between 520 and 580;
+
+select hindi from student_marks
+where hindi>any(select hindi from student_marks where marks_obtained>540);
+
+select sum(percentage),grade
+from school_report
+group by grade;
+
+Q.How much the total subject marks of student have sid=101?
+-------------------------------------------------------------
+select (english+marathi+hindi+maths+science+so_science)
+from student_marks
+where sid=101;
+
+Q.How much the total marks with percentage of particular student ?
+---------------------------------------------------------------------
+select ((english+marathi+hindi+maths+science+so_science)/600)*100
+from student_marks
+where sid=101;
+
+Q.How many no.of students who have grade 'A1' ?
+------------------------------------------------
+select count(sid)
+from school_report
+where grade='A1';
+
+select extract (year from sysdate)
+from dual;
+
+Q.Show the detailes of students
+----------------------------------------------------------
+select sname,academic_year,marks_obtained,percentage,grade
+from students,school_report
+where students.sid=school_report.sid;
+
+Simple join:
+
+Q.What are the maths marks of students?
+--------------------------------------------
+select sname,maths
+from students,student_marks
+where students.sid=student_marks.sid;
+
+Q.find student name,marks,percentage grade with their particular year
+
+select sname,marks_obtained,percentage,grade
+from students,school_report
+where students.year=school_report.academic_year;
+
+Q.students detail using full join
+
+select sname,academic_year,marks_obtained,percentage,grade
+from students 
+full join
+school_report on
+students.sid=school_report.sid;
+
+select sname, marks_obtained,grade
+from students ,school_report
+where students.sid=school_report.sid and marks_obtained=(select min(marks_obtained)
+from school_report);
+-----------------------------------------------------
+Q.Which student obtained highest marks ?
+------------------------------------------------------
+select sname, marks_obtained
+from students ,school_report
+where students.sid=school_report.sid and marks_obtained=(select max(marks_obtained)
+from school_report);
+
+-----------------------------------------------------------  
+Q.Which student obtained lowest marks in marathi?
+-----------------------------------------------------------
+select sname, marathi
+from students ,student_marks
+where students.sid=student_marks.sid and marathi=(select min(marathi) from student_marks);
+
+select sid,marks_obtained
+from school_report
+where  marks_obtained=(select max( marks_obtained)from school_report);
+
+
+select sname,maths
+from students,student_marks
+where students.sid=student_marks.sid and sname='Ganesh sawant';
+
+----------------------------------------------------
+Q.How many students got A2 & A1 gerades?
+----------------------------------------------------
+select grade,count(sid)
+from school_report
+where grade in('A1','A2')
+group by grade ;
+
+------------------------------------------------------------------
+Q.Which female or male students got above 90 percentage ?
+------------------------------------------------------------------
+select sname,gender
+from students,school_report
+where students.sid=school_report.sid and percentage>90;
+
+----------------------------------------------------------------------
+Q.Which student have best marks in languages ?(english+marathi+hindi)
+----------------------------------------------------------------------
+select sname,(english+marathi+hindi)
+from students ,student_marks
+where students.sid=student_marks.sid and english+marathi+hindi=(select max(english+marathi+hindi)
+from student_marks);
+
+select sname,(english+marathi+hindi)
+from students ,student_marks
+where students.sid=student_marks.sid and english+marathi+hindi=(select max(english)+
+max(marathi)+max(hindi)from student_marks);
+
+----------------------------------------------------------------------
+Q.How much marks did prashant khade got in social science ?
+---------------------------------------------------------------------
+select sname,so_science
+from students,student_marks
+where students.sid=student_marks.sid and sname='Prashant khade';
+
+----------------------------------------------------------------
+Q.Which two students got similar marks ?
+----------------------------------------------------------------
+select sname,marks_obtained
+from students,student_marks
+wherestudents.sid=student_marks.sid and marks_obtained is same;
+
+
+
+
+
+
+
+
+
+
+
